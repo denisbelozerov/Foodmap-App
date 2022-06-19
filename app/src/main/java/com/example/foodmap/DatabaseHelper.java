@@ -26,6 +26,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String columnProductsFats = "Содержание жиров (на 100 гр)";
     static final String columnProductsCarb = "Содержание углеводов (на 100 гр)";
 
+    static final String tableCategory = "Категория"; // название таблицы Категория в бд
+    static final String columnCategoryCode = "Код категории";
+    static final String columnCategoryName = "Название категории";
+
     static final String tableFODMAP = "FODMAP"; // название таблицы FODMAP в бд
     static final String columnFodmapProducts = "Название продукта";
     static final String columnFodmapUnit = "Единицы измерения гр";

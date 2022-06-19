@@ -8,14 +8,17 @@ import android.view.LayoutInflater
 import android.widget.SimpleCursorAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
 import com.example.foodmap.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var db: SQLiteDatabase
-    private lateinit var userCursor: Cursor
+    private lateinit var productCursor: Cursor
     private lateinit var fodmapCursor: Cursor
+    private lateinit var productAdapter: ProductAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +31,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        db = databaseHelper.open()
 
-        db = databaseHelper.open() // открываем подключение
-        userCursor = db.rawQuery("SELECT * FROM " + DatabaseHelper.tableProducts, null) // получаем все данные из БД в виде курсора
-        val queryFodmap = "SELECT Продукты._id, Продукты.[Название продукта], Продукты.[Наличие глютена], FODMAP.[Единицы измерения гр], FODMAP.[Наличие Olygos (олигосахариды)], FODMAP.[Наличие Fructose (фруктоза)], FODMAP.[Наличие Polyols (полиолы)], FODMAP.[Наличие Lactose (лактоза)]\n" +
-                "FROM Продукты INNER JOIN FODMAP ON Продукты.[Название продукта] = FODMAP.[Название продукта]" // запрос к БД на получение информации о продуктах
-        fodmapCursor = db.rawQuery(queryFodmap,  null) // совершаем запрос и сохраняем в курсор
-        val headers = arrayOf(DatabaseHelper.columnProductsName) // определяем какие столбцы будут показываться в ListView
-        val userAdapter = SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, userCursor, headers, intArrayOf(android.R.id.text1),0) // создаем адаптер
-        binding.lvProducts.adapter = userAdapter
+        val queryProducts = "SELECT * FROM " + DatabaseHelper.tableProducts + " INNER JOIN " + DatabaseHelper.tableCategory + " ON " + "Продукты.[Категория продукта] = Категория.[Код категории]"
+        productCursor = db.rawQuery(queryProducts, null)
 
+        initial()
+
+        /*
         // обработка нажатия по элементу списка
         binding.lvProducts.setOnItemClickListener { parent, view, position, id ->
             userCursor.moveToPosition(position) // перемещаемся на нужную позицию курсора
@@ -52,17 +53,40 @@ class MainActivity : AppCompatActivity() {
 
             createAlertDialog(itemName, itemOlygos, itemFructose, itemPolyols, itemLactose, itemGluten)
         }
+        */
     }
 
     override fun onDestroy() {
         super.onDestroy()
         db.close()
-        userCursor.close()
+        productCursor.close()
     }
 
+    private fun initial() {
+        recyclerView = binding.rvProducts
+        productAdapter = ProductAdapter()
+        recyclerView.adapter = productAdapter
+        productAdapter.setList(myProducts())
+    }
+
+    fun myProducts(): ArrayList<ProductModel> {
+        val productList = ArrayList<ProductModel>()
+        val count: Int = productCursor.count
+        var i = 0
+        while (i < count) {
+            productCursor.moveToPosition(i)
+            val nameProduct: String = productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsName))
+            val categoryProduct: String = productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnCategoryName))
+            productList.add(ProductModel(nameProduct, categoryProduct))
+            i++
+        }
+        return productList
+    }
+
+    /*
     // Создание Alert Dialog
     private fun createAlertDialog(title: String, olygos: String, fructose: String, polyols: String, lactose: String, gluten: String) {
-        val productDialogView = LayoutInflater.from(this).inflate(R.layout.custom_alert_dialog_info_products, null) // inflate Dialog with custom view
+        val productDialogView = LayoutInflater.from(this).inflate(R.layout.custom_alert_dialog_info_products, null)
         val builder = AlertDialog.Builder(this).setView(productDialogView).setTitle(title) // AlertDialogBuilder
 
         val textViewOlygos: TextView = productDialogView.findViewById(R.id.Olygos)
@@ -83,5 +107,5 @@ class MainActivity : AppCompatActivity() {
         builder.setPositiveButton("OK") { dialog, which ->
         }
         builder.show()
-    }
+    } */
 }
