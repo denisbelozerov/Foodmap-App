@@ -4,14 +4,16 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.SimpleCursorAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodmap.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var databaseHelper: DatabaseHelper
     private lateinit var db: SQLiteDatabase
@@ -19,6 +21,32 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fodmapCursor: Cursor
     private lateinit var productAdapter: ProductAdapter
     private lateinit var recyclerView: RecyclerView
+
+    private fun initial() {
+        recyclerView = binding.rvProducts
+        productAdapter = ProductAdapter(myProducts(), this)
+        recyclerView.adapter = productAdapter
+    }
+
+    private fun myProducts(): ArrayList<ProductModel> {
+        val productList = ArrayList<ProductModel>()
+        val count: Int = productCursor.count
+        var i = 0
+        while (i < count) {
+            productCursor.moveToPosition(i)
+            val nameProduct: String = productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsName))
+            val categoryProduct: String = productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnCategoryName))
+            productList.add(ProductModel(nameProduct, categoryProduct)) // сюда надо ссылку на название продукта и категорию по нужной строке
+            i++
+        }
+        return productList
+    }
+
+    override fun onItemClicked(product: ProductModel) {
+        Toast.makeText(this,"Product: ${product.product} \n Category: ${product.category}",Toast.LENGTH_LONG)
+            .show()
+        Log.i("USER_", product.product)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +63,10 @@ class MainActivity : AppCompatActivity() {
 
         val queryProducts = "SELECT * FROM " + DatabaseHelper.tableProducts + " INNER JOIN " + DatabaseHelper.tableCategory + " ON " + "Продукты.[Категория продукта] = Категория.[Код категории]"
         productCursor = db.rawQuery(queryProducts, null)
+
+        val queryFodmap = "SELECT Продукты._id, Продукты.[Название продукта], Продукты.[Наличие глютена], FODMAP.[Единицы измерения гр], FODMAP.[Наличие Olygos (олигосахариды)], FODMAP.[Наличие Fructose (фруктоза)], FODMAP.[Наличие Polyols (полиолы)], FODMAP.[Наличие Lactose (лактоза)]\n" +
+                "FROM Продукты INNER JOIN FODMAP ON Продукты.[Название продукта] = FODMAP.[Название продукта]" // запрос к БД на получение информации о продуктах
+        fodmapCursor = db.rawQuery(queryFodmap,  null)
 
         initial()
 
@@ -60,27 +92,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         db.close()
         productCursor.close()
-    }
-
-    private fun initial() {
-        recyclerView = binding.rvProducts
-        productAdapter = ProductAdapter()
-        recyclerView.adapter = productAdapter
-        productAdapter.setList(myProducts())
-    }
-
-    fun myProducts(): ArrayList<ProductModel> {
-        val productList = ArrayList<ProductModel>()
-        val count: Int = productCursor.count
-        var i = 0
-        while (i < count) {
-            productCursor.moveToPosition(i)
-            val nameProduct: String = productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsName))
-            val categoryProduct: String = productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnCategoryName))
-            productList.add(ProductModel(nameProduct, categoryProduct))
-            i++
-        }
-        return productList
     }
 
     /*
