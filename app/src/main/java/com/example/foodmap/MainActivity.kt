@@ -43,9 +43,15 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onItemClicked(product: ProductModel) {
-        Toast.makeText(this,"Product: ${product.product} \n Category: ${product.category}",Toast.LENGTH_LONG)
-            .show()
-        Log.i("USER_", product.product)
+        val queryFodmap = "SELECT Продукты._id, Продукты.[Название продукта], Продукты.[Наличие глютена], FODMAP.[Единицы измерения гр], FODMAP.[Наличие Olygos (олигосахариды)], FODMAP.[Наличие Fructose (фруктоза)], FODMAP.[Наличие Polyols (полиолы)], FODMAP.[Наличие Lactose (лактоза)] FROM Продукты INNER JOIN FODMAP ON Продукты.[Название продукта] = FODMAP.[Название продукта] WHERE Продукты.[Название продукта] = \"${product.product}\""
+        fodmapCursor = db.rawQuery(queryFodmap,  null)
+        fodmapCursor.moveToFirst()
+        val itemOlygos = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapOlygos)) // извлекаем характеристики продукта и передаем в AlertDialog
+        val itemFructose = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapFructose))
+        val itemPolyols = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapPolyols))
+        val itemLactose = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapLactose))
+        val itemGluten = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsGluten))
+        createAlertDialog("${product.product}", itemOlygos, itemFructose, itemPolyols, itemLactose, itemGluten)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,7 +100,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         productCursor.close()
     }
 
-    /*
+
     // Создание Alert Dialog
     private fun createAlertDialog(title: String, olygos: String, fructose: String, polyols: String, lactose: String, gluten: String) {
         val productDialogView = LayoutInflater.from(this).inflate(R.layout.custom_alert_dialog_info_products, null)
@@ -118,5 +124,5 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         builder.setPositiveButton("OK") { dialog, which ->
         }
         builder.show()
-    } */
+    }
 }
