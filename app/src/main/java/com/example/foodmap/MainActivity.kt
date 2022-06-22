@@ -75,23 +75,6 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         fodmapCursor = db.rawQuery(queryFodmap,  null)
 
         initial()
-
-        /*
-        // обработка нажатия по элементу списка
-        binding.lvProducts.setOnItemClickListener { parent, view, position, id ->
-            userCursor.moveToPosition(position) // перемещаемся на нужную позицию курсора
-            val itemName = userCursor.getString(userCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsName)) // извлекаем название продукта и передаем в тайтл AlertDialog
-            val itemGluten = userCursor.getString(userCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsGluten))
-
-            fodmapCursor.moveToPosition(position)
-            val itemOlygos = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapOlygos)) // извлекаем характеристики продукта и передаем в AlertDialog
-            val itemFructose = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapFructose))
-            val itemPolyols = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapPolyols))
-            val itemLactose = fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapLactose))
-
-            createAlertDialog(itemName, itemOlygos, itemFructose, itemPolyols, itemLactose, itemGluten)
-        }
-        */
     }
 
     override fun onDestroy() {

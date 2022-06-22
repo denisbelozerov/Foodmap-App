@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Foodmap App</string>
+    <string name="info_products">Информация о продукте</string>
+    <string name="weight_products">Вес продукта</string>
+    <string name="olygos">Olygos</string>
+    <string name="fructose">Frustoce</string>
+    <string name="polyols">Polyols</string>
+    <string name="lactose">Lactose</string>
 </resources>
