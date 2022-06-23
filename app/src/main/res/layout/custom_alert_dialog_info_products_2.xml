@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:shrinkColumns="0"
+    android:stretchColumns="0">
+
+    <TableRow>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="5dp"
+            android:text="@string/info_products"
+            android:textSize="16sp" />
+    </TableRow>
+
+    <TableRow android:gravity="center">
+        <TextView
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:text="@string/weight_products"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:text="@string/olygos"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:text="@string/fructose"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
+            android:padding="2dp"
+            android:text="@string/polyols"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:text="@string/lactose"
+            android:textSize="14sp" />
+    </TableRow>
+
+    <TableRow android:gravity="center">
+        <TextView
+            android:id="@+id/Product_weight_2_1_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Olygos_2_1_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Fructose_2_1_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Polyols_2_1_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Lactose_2_1_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+    </TableRow>
+
+    <TableRow android:gravity="center">
+        <TextView
+            android:id="@+id/Product_weight_2_2_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Olygos_2_2_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Fructose_2_2_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Polyols_2_2_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Lactose_2_2_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:padding="2dp"
+            android:textSize="14sp" />
+    </TableRow>
+</TableLayout>
