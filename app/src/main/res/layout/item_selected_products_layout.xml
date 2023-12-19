@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/icon_product"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/no_image"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="2dp" >
+            <TextView
+                android:id="@+id/name_product"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginLeft="55dp"
+                android:layout_marginRight="105dp"
+                android:layout_toRightOf="@id/icon_product"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="Product"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/category_product"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginLeft="55dp"
+                android:layout_marginRight="105dp"
+                android:layout_toRightOf="@id/icon_product"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:text="Category"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/safety_indicator"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@+id/add_to_favorite"
+            android:layout_centerVertical="true"
+            android:src="@color/red"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#FF000000"/>
+
+        <ImageButton
+            android:id="@+id/add_to_favorite"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/baseline_favorite_border_24"
+            android:background="@null"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
