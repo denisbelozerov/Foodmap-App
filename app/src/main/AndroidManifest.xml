@@ -10,8 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Foodmap">
         <activity
+            android:name=".SelectedProducts"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
