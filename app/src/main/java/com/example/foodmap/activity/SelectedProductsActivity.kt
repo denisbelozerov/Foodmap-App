@@ -11,7 +11,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
-import com.example.foodmap.databinding.ActivityMainBinding
+import com.example.foodmap.activity.MainActivity
+import com.example.foodmap.databinding.ActivitySelectedProductsBinding
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -20,29 +21,29 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 
-class MainActivity : AppCompatActivity(), OnItemClickListener {
-    private lateinit var binding: ActivityMainBinding
+class SelectedProducts : AppCompatActivity(), OnItemClickListenerProduct {
+    private lateinit var binding: ActivitySelectedProductsBinding
     private lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
-    private lateinit var productCursor: Cursor
+    private lateinit var favouriteProductCursor: Cursor
     private lateinit var fodmapCursor: Cursor
-    private lateinit var productAdapter: ProductAdapter
+    private lateinit var favouriteProductAdapter: FavouriteProductAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var mDrawer: Drawer
     private lateinit var mHeader: AccountHeader
     private lateinit var mToolbar: Toolbar
 
+
     private fun initial() {
-        recyclerView = binding.rvProducts
-        productAdapter = ProductAdapter(myProducts(), this)
-        recyclerView.adapter = productAdapter
+        recyclerView = binding.rvSelectedProducts
+        favouriteProductAdapter = FavouriteProductAdapter(myProducts(), this)
+        recyclerView.adapter = favouriteProductAdapter
         mToolbar = binding.mainToolbar
 
         setSupportActionBar(mToolbar)
         createHeader()
         createDrawer()
     }
-
     private fun createDrawer() {
         mDrawer =
             DrawerBuilder()
@@ -54,21 +55,25 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                 .addDrawerItems(
                     PrimaryDrawerItem().withIdentifier(1)
                         .withIconTintingEnabled(true)
-                        .withName("Профиль пользователя")
+                        .withName("Все продукты")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(2)
                         .withIconTintingEnabled(true)
-                        .withName("Мой дневник")
+                        .withName("Профиль пользователя")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(3)
                         .withIconTintingEnabled(true)
-                        .withName("Мои продукты")
+                        .withName("Мой дневник")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(4)
                         .withIconTintingEnabled(true)
-                        .withName("Мои рецепты")
+                        .withName("Мои продукты")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(5)
+                        .withIconTintingEnabled(true)
+                        .withName("Мои рецепты")
+                        .withSelectable(false),
+                    PrimaryDrawerItem().withIdentifier(6)
                         .withIconTintingEnabled(true)
                         .withName("Выход")
                         .withSelectable(false)
@@ -78,10 +83,12 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                         position: Int,
                         drawerItem: IDrawerItem<*>
                     ): Boolean {
-                        val newIntent = Intent(this@MainActivity, SelectedProducts::class.java)
+                        val intentMyProducts = Intent(this@SelectedProducts, SelectedProducts::class.java)
+                        val intentAllProducts = Intent(this@SelectedProducts, MainActivity::class.java)
 
                         when (position) {
-                            3 -> startActivity(newIntent)
+                            1 -> startActivity(intentAllProducts)
+                            4 -> startActivity(intentMyProducts)
                         }
                         return false
                     }
@@ -103,22 +110,22 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     private fun myProducts(): ArrayList<ProductModel> {
         val productList = ArrayList<ProductModel>()
-        val count: Int = productCursor.count
+        val count: Int = favouriteProductCursor.count
 
         var i = 0
         while (i < count) {
-            var colorSafety = getColor(R.color.green) // храним цвет каждого продукта
+            var colorSafety = getColor(R.color.green)
             var favouriteProduct = R.drawable.baseline_favorite_border_24
 
-            productCursor.moveToPosition(i)
+            favouriteProductCursor.moveToPosition(i)
             val nameProduct: String =
-                productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsName))
+                favouriteProductCursor.getString(favouriteProductCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsName))
             val categoryProduct: String =
-                productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnCategoryName))
+                favouriteProductCursor.getString(favouriteProductCursor.getColumnIndexOrThrow(DatabaseHelper.columnCategoryName))
             val safetyIndicator: String =
-                productCursor.getString(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnSafetyIndicator))
+                favouriteProductCursor.getString(favouriteProductCursor.getColumnIndexOrThrow(DatabaseHelper.columnSafetyIndicator))
             val favouriteIndicator: Int =
-                productCursor.getInt(productCursor.getColumnIndexOrThrow(DatabaseHelper.columnFavouriteProduct))
+                favouriteProductCursor.getInt(favouriteProductCursor.getColumnIndexOrThrow(DatabaseHelper.columnFavouriteProduct))
 
             when (safetyIndicator) {
                 "Безопасен" -> colorSafety = getColor(R.color.green)
@@ -166,14 +173,37 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         builder.show()
     }
 
-    override fun onItemClicked(product: ProductModel) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySelectedProductsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        databaseHelper = DatabaseHelper(applicationContext)
+        databaseHelper.create_db()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        db = databaseHelper.open()
+        favouriteProductCursor = db.rawQuery(DatabaseHelper.Companion.queryFavouriteProducts, null)
+        fodmapCursor = db.rawQuery(DatabaseHelper.Companion.queryFodmap, null)
+        initial()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        favouriteProductCursor.close()
+        db.close()
+    }
+
+    override fun onItemClickedProduct(product: ProductModel) {
         fodmapCursor = db.rawQuery(
-            DatabaseHelper.Companion.queryFodmap + "WHERE Продукты.[Название продукта] = \"${product.product}\"",
+            DatabaseHelper.queryFodmap + "WHERE Продукты.[Название продукта] = \"${product.product}\"",
             null
         )
         fodmapCursor.moveToFirst()
         val itemOlygos =
-            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapOlygos)) // извлекаем характеристики продукта и передаем в AlertDialog
+            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapOlygos))
         val itemFructose =
             fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapFructose))
         val itemPolyols =
@@ -190,28 +220,5 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             itemLactose,
             itemWeight
         )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        databaseHelper = DatabaseHelper(applicationContext)
-        databaseHelper.create_db()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        db = databaseHelper.open()
-        productCursor = db.rawQuery(DatabaseHelper.Companion.queryProducts, null)
-        fodmapCursor = db.rawQuery(DatabaseHelper.Companion.queryFodmap, null)
-        initial()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        db.close()
-        productCursor.close()
     }
 }

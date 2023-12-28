@@ -49,6 +49,8 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
             "SELECT Продукты._id, Продукты.[Название продукта], Продукты.[Наличие глютена], FODMAP.[Единицы измерения гр], FODMAP.[Наличие Olygos (олигосахариды)], FODMAP.[Наличие Fructose (фруктоза)], FODMAP.[Наличие Polyols (полиолы)], FODMAP.[Наличие Lactose (лактоза)] FROM Продукты INNER JOIN FODMAP ON Продукты.[Название продукта] = FODMAP.[Название продукта]"
         const val queryProducts =
             "SELECT * FROM Продукты INNER JOIN Категория ON Продукты.[Категория продукта] = Категория.[Код категории]"
+        const val queryFavouriteProducts =
+            "SELECT * FROM Продукты INNER JOIN Категория ON Продукты.[Категория продукта] = Категория.[Код категории] WHERE Продукты.[Избранное] = 1"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {}

@@ -1,19 +1,16 @@
 package com.example.foodmap
 
-import android.annotation.SuppressLint
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodmap.activity.MainActivity
 import com.example.foodmap.databinding.ItemProductsLayoutBinding
 import com.mikepenz.iconics.Iconics.applicationContext
 
 
-class MyHolder(val binding: ItemProductsLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+class ProductHolder(val binding: ItemProductsLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
     val name_product = binding.nameProduct
     val name_category = binding.categoryProduct
     val safety_indicator: ImageView = binding.safetyIndicator
@@ -34,14 +31,13 @@ class MyHolder(val binding: ItemProductsLayoutBinding) : RecyclerView.ViewHolder
 
 class ProductAdapter(
     private var products: ArrayList<ProductModel>,
-    val itemClickListener: OnItemClickListener
-) : RecyclerView.Adapter<MyHolder>() {
+    private val itemClickListener: MainActivity
+) : RecyclerView.Adapter<ProductHolder>() {
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_products_layout, parent, false)
-        return MyHolder(
+        return ProductHolder(
             ItemProductsLayoutBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -50,12 +46,12 @@ class ProductAdapter(
         )
     }
 
-    override fun onBindViewHolder(myHolder: MyHolder, position: Int) {
+    override fun onBindViewHolder(myHolder: ProductHolder, position: Int) {
         val currentPosition = products.get(position)
         myHolder.bind(currentPosition, itemClickListener)
 
         myHolder.binding.addToFavorite.setOnClickListener {
-            var databaseHelper = DatabaseHelper(applicationContext)
+            val databaseHelper = DatabaseHelper(applicationContext)
 
             if (!myHolder.buttonOn) {
                 myHolder.buttonOn = true
