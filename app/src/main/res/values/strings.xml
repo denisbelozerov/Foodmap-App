@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">Foodmap App</string>
     <string name="info_products">Информация о продукте</string>
+    <string name="info_recipies">Информация о рецепте</string>
     <string name="weight_products">Вес</string>
     <string name="olygos">Olygos</string>
     <string name="fructose">Fructose</string>
     <string name="polyols">Polyols</string>
     <string name="lactose">Lactose</string>
     <string name="gluten">Глютен</string>
-    <string name="allProducts">Все продукты</string>
-    <string name="selectedProducts">Избранное</string>
+    <string name="all_products">Все продукты</string>
+    <string name="all_recipies">Все рецепты</string>
+    <string name="selected_products">Любимые продукты</string>
+    <string name="selected_recipies">Любимые рецепты</string>
 </resources>

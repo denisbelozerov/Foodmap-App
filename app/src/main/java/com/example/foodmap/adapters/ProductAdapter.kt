@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodmap.activity.MainActivity
 import com.example.foodmap.databinding.ItemProductsLayoutBinding
+import com.example.foodmap.models.ProductModel
 import com.mikepenz.iconics.Iconics.applicationContext
 
 
@@ -35,8 +36,6 @@ class ProductAdapter(
 ) : RecyclerView.Adapter<ProductHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_products_layout, parent, false)
         return ProductHolder(
             ItemProductsLayoutBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -56,12 +55,12 @@ class ProductAdapter(
             if (!myHolder.buttonOn) {
                 myHolder.buttonOn = true
                 myHolder.add_to_favorite.setImageResource(R.drawable.baseline_favorite_24)
-                databaseHelper.addToFavourite(position)
+                databaseHelper.addProductToFavourite(position)
 
             } else {
                 myHolder.buttonOn = false
                 myHolder.add_to_favorite.setImageResource(R.drawable.baseline_favorite_border_24)
-                databaseHelper.deleteToFavourite(position)
+                databaseHelper.deleteProductFromFavourite(position)
             }
         }
     }

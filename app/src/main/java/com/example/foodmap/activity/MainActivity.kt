@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foodmap.DatabaseHelper
 import com.example.foodmap.OnItemClickListener
 import com.example.foodmap.ProductAdapter
-import com.example.foodmap.ProductModel
+import com.example.foodmap.models.ProductModel
 import com.example.foodmap.R
+import com.example.foodmap.RecipiesActivity
 import com.example.foodmap.SelectedProducts
+import com.example.foodmap.SelectedRecipies
 import com.example.foodmap.databinding.ActivityMainBinding
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
@@ -64,21 +66,25 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(2)
                         .withIconTintingEnabled(true)
-                        .withName("Профиль пользователя")
+                        .withName("Все рецепты")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(3)
                         .withIconTintingEnabled(true)
-                        .withName("Мой дневник")
+                        .withName("Профиль пользователя")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(4)
                         .withIconTintingEnabled(true)
-                        .withName("Мои продукты")
+                        .withName("Мой дневник")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(5)
                         .withIconTintingEnabled(true)
-                        .withName("Мои рецепты")
+                        .withName("Мои продукты")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(6)
+                        .withIconTintingEnabled(true)
+                        .withName("Мои рецепты")
+                        .withSelectable(false),
+                    PrimaryDrawerItem().withIdentifier(7)
                         .withIconTintingEnabled(true)
                         .withName("Выход")
                         .withSelectable(false)
@@ -89,11 +95,15 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                         drawerItem: IDrawerItem<*>
                     ): Boolean {
                         val intentMyProducts = Intent(this@MainActivity, SelectedProducts::class.java)
+                        val intentMyRecipies = Intent(this@MainActivity, SelectedRecipies::class.java)
                         val intentAllProducts = Intent(this@MainActivity, MainActivity::class.java)
+                        val intentAllRecipies = Intent(this@MainActivity, RecipiesActivity::class.java)
 
                         when (position) {
                             1 -> startActivity(intentAllProducts)
-                            4 -> startActivity(intentMyProducts)
+                            2 -> startActivity(intentAllRecipies)
+                            5 -> startActivity(intentMyProducts)
+                            6 -> startActivity(intentMyRecipies)
                         }
                         return false
                     }

@@ -11,12 +11,22 @@
         android:theme="@style/Theme.Foodmap">
         <activity
             android:name=".SelectedProducts"
-            android:label="@string/selectedProducts"
+            android:label="@string/selected_products"
+            android:exported="false"
+            android:theme="@style/NoActionBarTheme"/>
+        <activity
+            android:name=".SelectedRecipies"
+            android:label="@string/selected_recipies"
+            android:exported="false"
+            android:theme="@style/NoActionBarTheme"/>
+        <activity
+            android:name=".RecipiesActivity"
+            android:label="@string/all_recipies"
             android:exported="false"
             android:theme="@style/NoActionBarTheme"/>
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/allProducts"
+            android:label="@string/all_products"
             android:exported="true"
             android:theme="@style/NoActionBarTheme">
             <intent-filter>

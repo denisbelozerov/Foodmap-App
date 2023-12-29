@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodmap.activity.MainActivity
 import com.example.foodmap.databinding.ActivitySelectedProductsBinding
+import com.example.foodmap.models.ProductModel
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -59,21 +60,25 @@ class SelectedProducts : AppCompatActivity(), OnItemClickListenerProduct {
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(2)
                         .withIconTintingEnabled(true)
-                        .withName("Профиль пользователя")
+                        .withName("Все рецепты")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(3)
                         .withIconTintingEnabled(true)
-                        .withName("Мой дневник")
+                        .withName("Профиль пользователя")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(4)
                         .withIconTintingEnabled(true)
-                        .withName("Мои продукты")
+                        .withName("Мой дневник")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(5)
                         .withIconTintingEnabled(true)
-                        .withName("Мои рецепты")
+                        .withName("Мои продукты")
                         .withSelectable(false),
                     PrimaryDrawerItem().withIdentifier(6)
+                        .withIconTintingEnabled(true)
+                        .withName("Мои рецепты")
+                        .withSelectable(false),
+                    PrimaryDrawerItem().withIdentifier(7)
                         .withIconTintingEnabled(true)
                         .withName("Выход")
                         .withSelectable(false)
@@ -84,11 +89,15 @@ class SelectedProducts : AppCompatActivity(), OnItemClickListenerProduct {
                         drawerItem: IDrawerItem<*>
                     ): Boolean {
                         val intentMyProducts = Intent(this@SelectedProducts, SelectedProducts::class.java)
+                        val intentMyRecipies = Intent(this@SelectedProducts, SelectedRecipies::class.java)
                         val intentAllProducts = Intent(this@SelectedProducts, MainActivity::class.java)
+                        val intentAllRecipies = Intent(this@SelectedProducts, RecipiesActivity::class.java)
 
                         when (position) {
                             1 -> startActivity(intentAllProducts)
-                            4 -> startActivity(intentMyProducts)
+                            2 -> startActivity(intentAllRecipies)
+                            5 -> startActivity(intentMyProducts)
+                            6 -> startActivity(intentMyRecipies)
                         }
                         return false
                     }

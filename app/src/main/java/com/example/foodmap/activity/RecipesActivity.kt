@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodmap.activity.MainActivity
 import com.example.foodmap.databinding.ActivityRecipiesBinding
-import com.example.foodmap.databinding.ActivitySelectedProductsBinding
+import com.example.foodmap.models.RecipiesModel
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -22,12 +22,12 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 
-class RecipiesActivity : AppCompatActivity(), OnItemClickListenerProduct {
+class RecipiesActivity : AppCompatActivity(), OnItemClickListenerRecipe {
     private lateinit var binding: ActivityRecipiesBinding
     private lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
-    private lateinit var RecipiesCursor: Cursor
-    private lateinit var fodmapCursor: Cursor
+    private lateinit var recipiesCursor: Cursor
+    private lateinit var descriptionRecipeCursor: Cursor
     private lateinit var RecipiesAdapter: RecipiesAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var mDrawer: Drawer
@@ -89,6 +89,7 @@ class RecipiesActivity : AppCompatActivity(), OnItemClickListenerProduct {
                         drawerItem: IDrawerItem<*>
                     ): Boolean {
                         val intentMyProducts = Intent(this@RecipiesActivity, SelectedProducts::class.java)
+                        val intentMyRecipies = Intent(this@RecipiesActivity, SelectedRecipies::class.java)
                         val intentAllProducts = Intent(this@RecipiesActivity, MainActivity::class.java)
                         val intentAllRecipies = Intent(this@RecipiesActivity, RecipiesActivity::class.java)
 
@@ -96,6 +97,7 @@ class RecipiesActivity : AppCompatActivity(), OnItemClickListenerProduct {
                             1 -> startActivity(intentAllProducts)
                             2 -> startActivity(intentAllRecipies)
                             5 -> startActivity(intentMyProducts)
+                            6 -> startActivity(intentMyRecipies)
                         }
                         return false
                     }
@@ -116,64 +118,54 @@ class RecipiesActivity : AppCompatActivity(), OnItemClickListenerProduct {
     }
 
     private fun myRecipies(): ArrayList<RecipiesModel> {
-        val productList = ArrayList<RecipiesModel>()
-        val count: Int = favouriteProductCursor.count
+        val recipiesList = ArrayList<RecipiesModel>()
+        val count: Int = recipiesCursor.count
 
         var i = 0
         while (i < count) {
             var colorSafety = getColor(R.color.green)
             var favouriteProduct = R.drawable.baseline_favorite_border_24
 
-            favouriteProductCursor.moveToPosition(i)
-            val nameProduct: String =
-                favouriteProductCursor.getString(favouriteProductCursor.getColumnIndexOrThrow(DatabaseHelper.columnProductsName))
-            val categoryProduct: String =
-                favouriteProductCursor.getString(favouriteProductCursor.getColumnIndexOrThrow(DatabaseHelper.columnCategoryName))
-            val safetyIndicator: String =
-                favouriteProductCursor.getString(favouriteProductCursor.getColumnIndexOrThrow(DatabaseHelper.columnSafetyIndicator))
-            val favouriteIndicator: Int =
-                favouriteProductCursor.getInt(favouriteProductCursor.getColumnIndexOrThrow(DatabaseHelper.columnFavouriteProduct))
+            recipiesCursor.moveToPosition(i)
+            val nameRecipe: String =
+                recipiesCursor.getString(recipiesCursor.getColumnIndexOrThrow(DatabaseHelper.columnRecipiesName))
+            val typeRecipe: String =
+                recipiesCursor.getString(recipiesCursor.getColumnIndexOrThrow(DatabaseHelper.columnRecipiesType))
+            val typeCusine: String =
+                recipiesCursor.getString(recipiesCursor.getColumnIndexOrThrow(DatabaseHelper.columnRecipiesCusine))
+            val recipeSafetyIndicator: String =
+                recipiesCursor.getString(recipiesCursor.getColumnIndexOrThrow(DatabaseHelper.columnSafetyIndicator))
+            val favouriteRecipeIndicator: Int =
+                recipiesCursor.getInt(recipiesCursor.getColumnIndexOrThrow(DatabaseHelper.columnFavouriteRecipies))
 
-            when (safetyIndicator) {
+            when (recipeSafetyIndicator) {
                 "Безопасен" -> colorSafety = getColor(R.color.green)
                 "Небезопасен" -> colorSafety = getColor(R.color.red)
                 "Умеренно безопасен" -> colorSafety = getColor(R.color.yellow)
             }
 
-            when (favouriteIndicator) {
+            when (favouriteRecipeIndicator) {
                 0 -> favouriteProduct = R.drawable.baseline_favorite_border_24
                 1 -> favouriteProduct = R.drawable.baseline_favorite_24
             }
 
-            productList.add(ProductModel(nameProduct, categoryProduct, colorSafety, favouriteProduct))
+            recipiesList.add(RecipiesModel(nameRecipe, typeRecipe, typeCusine, colorSafety, favouriteProduct))
             i++
         }
-        return productList
+        return recipiesList
     }
 
     private fun createAlertDialog(
         title: String,
-        olygos: String,
-        fructose: String,
-        polyols: String,
-        lactose: String,
-        weight: String
+        descriptionRecipe: String,
     ) {
         val productDialogView =
-            LayoutInflater.from(this).inflate(R.layout.custom_alert_dialog_info_products_1, null)
+            LayoutInflater.from(this).inflate(R.layout.custom_alert_dialog_info_recipe, null)
         val builder = AlertDialog.Builder(this).setView(productDialogView).setTitle(title)
 
-        val textViewWeight: TextView = productDialogView.findViewById(R.id.Product_weight_1_1_1)
-        val textViewOlygos: TextView = productDialogView.findViewById(R.id.Olygos_1_1_2)
-        val textViewFructose: TextView = productDialogView.findViewById(R.id.Fructose_1_1_3)
-        val textViewPolyols: TextView = productDialogView.findViewById(R.id.Polyols_1_1_4)
-        val textViewLactose: TextView = productDialogView.findViewById(R.id.Lactose_1_1_5)
+        val textViewRecipeDescription: TextView = productDialogView.findViewById(R.id.recipe_description)
 
-        textViewWeight.setText(weight + " гр")
-        textViewOlygos.setText(olygos)
-        textViewFructose.setText(fructose)
-        textViewPolyols.setText(polyols)
-        textViewLactose.setText(lactose)
+        textViewRecipeDescription.setText(descriptionRecipe)
 
         builder.setPositiveButton("OK") { dialog, which ->
         }
@@ -182,7 +174,7 @@ class RecipiesActivity : AppCompatActivity(), OnItemClickListenerProduct {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySelectedProductsBinding.inflate(layoutInflater)
+        binding = ActivityRecipiesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         databaseHelper = DatabaseHelper(applicationContext)
         databaseHelper.create_db()
@@ -191,41 +183,30 @@ class RecipiesActivity : AppCompatActivity(), OnItemClickListenerProduct {
     override fun onStart() {
         super.onStart()
         db = databaseHelper.open()
-        favouriteProductCursor = db.rawQuery(DatabaseHelper.Companion.queryFavouriteProducts, null)
-        fodmapCursor = db.rawQuery(DatabaseHelper.Companion.queryFodmap, null)
+        recipiesCursor = db.rawQuery(DatabaseHelper.Companion.queryAllRecipies, null)
+        descriptionRecipeCursor = db.rawQuery(DatabaseHelper.Companion.queryFodmap, null)
         initial()
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
-        favouriteProductCursor.close()
+        recipiesCursor.close()
         db.close()
     }
 
-    override fun onItemClickedProduct(recipies: RecipiesModel) {
-        fodmapCursor = db.rawQuery(
-            DatabaseHelper.queryFodmap + "WHERE Продукты.[Название продукта] = \"${product.product}\"",
+
+    override fun onItemClickedRecipe(recipies: RecipiesModel) {
+        descriptionRecipeCursor = db.rawQuery(
+            DatabaseHelper.queryAllRecipies + "WHERE Рецепты.[Название] = \"${recipies.recipe}\"",
             null
         )
-        fodmapCursor.moveToFirst()
-        val itemOlygos =
-            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapOlygos))
-        val itemFructose =
-            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapFructose))
-        val itemPolyols =
-            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapPolyols))
-        val itemLactose =
-            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapLactose))
-        val itemWeight =
-            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapUnit))
+        descriptionRecipeCursor.moveToFirst()
+        val descriptionRecipe =
+            descriptionRecipeCursor.getString(descriptionRecipeCursor.getColumnIndexOrThrow(DatabaseHelper.columnRecipiesDescription))
         createAlertDialog(
-            "${product.product}",
-            itemOlygos,
-            itemFructose,
-            itemPolyols,
-            itemLactose,
-            itemWeight
+            "${recipies.recipe}",
+            descriptionRecipe,
         )
     }
 }

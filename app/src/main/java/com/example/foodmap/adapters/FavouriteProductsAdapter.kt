@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.foodmap.databinding.ItemProductsLayoutBinding
 import com.example.foodmap.databinding.ItemSelectedProductsLayoutBinding
+import com.example.foodmap.models.ProductModel
 import com.mikepenz.iconics.Iconics.applicationContext
 
 
@@ -54,12 +54,12 @@ class FavouriteProductAdapter(
             if (!myHolder.buttonOn) {
                 myHolder.buttonOn = true
                 myHolder.add_to_favorite.setImageResource(R.drawable.baseline_favorite_24)
-                databaseHelper.addToFavourite(position)
+                databaseHelper.addProductToFavourite(position)
 
             } else {
                 myHolder.buttonOn = false
                 myHolder.add_to_favorite.setImageResource(R.drawable.baseline_favorite_border_24)
-                databaseHelper.deleteToFavourite(position)
+                databaseHelper.deleteProductFromFavourite(position)
             }
         }
     }

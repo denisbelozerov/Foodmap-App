@@ -1,4 +1,4 @@
-package com.example.foodmap
+package com.example.foodmap.models
 
 data class RecipiesModel(
     val recipe: String,
