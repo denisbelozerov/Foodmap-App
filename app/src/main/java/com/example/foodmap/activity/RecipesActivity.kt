@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodmap.activity.MainActivity
+import com.example.foodmap.activity.ProfileUserActivity
 import com.example.foodmap.databinding.ActivityRecipiesBinding
 import com.example.foodmap.models.RecipiesModel
 import com.mikepenz.materialdrawer.AccountHeader
@@ -92,10 +93,12 @@ class RecipiesActivity : AppCompatActivity(), OnItemClickListenerRecipe {
                         val intentMyRecipies = Intent(this@RecipiesActivity, SelectedRecipies::class.java)
                         val intentAllProducts = Intent(this@RecipiesActivity, MainActivity::class.java)
                         val intentAllRecipies = Intent(this@RecipiesActivity, RecipiesActivity::class.java)
+                        val intentUserInfo = Intent(this@RecipiesActivity, ProfileUserActivity::class.java)
 
                         when (position) {
                             1 -> startActivity(intentAllProducts)
                             2 -> startActivity(intentAllRecipies)
+                            3 -> startActivity(intentUserInfo)
                             5 -> startActivity(intentMyProducts)
                             6 -> startActivity(intentMyRecipies)
                         }

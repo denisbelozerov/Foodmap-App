@@ -25,6 +25,11 @@
             android:exported="false"
             android:theme="@style/NoActionBarTheme"/>
         <activity
+            android:name=".activity.ProfileUserActivity"
+            android:label="@string/user_info"
+            android:exported="false"
+            android:theme="@style/NoActionBarTheme"/>
+        <activity
             android:name=".activity.MainActivity"
             android:label="@string/all_products"
             android:exported="true"

@@ -52,6 +52,8 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         const val queryAllRecipies =
             "SELECT Рецепты.[id], Рецепты.[Название], Рецепты.[Описание], Рецепты.[Индикатор безопасности], \"Категория рецептов\".[Название категории], \"Тип кухни\".[Название кухни], Рецепты.[Избранное] FROM \"Категория рецептов\" INNER JOIN Рецепты ON \"Категория рецептов\".[id] = Рецепты.[Категория] INNER JOIN \"Тип кухни\" ON Рецепты.[Национальная кухня] = \"Тип кухни\".[id]"
         const val queryFavouriteRecipies = queryAllRecipies + "WHERE Рецепты.[Избранное] = 1"
+        const val queryInfoUser = "SELECT * FROM Пользователь"
+        const val queryIdeology = "SELECT * FROM Идеология"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {}

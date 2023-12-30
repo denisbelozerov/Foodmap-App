@@ -19,14 +19,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:civ_border_width="1dp"
             android:src="@drawable/_avatar180"
             android:layout_marginTop="10dp"
             app:civ_border_color="@color/black"
             >
         </de.hdodenhof.circleimageview.CircleImageView>
         <TextView
+            android:id="@+id/full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Белозёров Денис Александрович"
@@ -72,9 +74,13 @@
                 android:text="Фамилия"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 android:layout_marginLeft="5dp" />
-            <TextView
+            <EditText
+                android:id="@+id/my_family"
+                android:inputType="text"
+                android:enabled="false"
+                android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Белозёров"
@@ -109,11 +115,15 @@
                 android:text="Имя"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 android:layout_marginLeft="5dp" />
-            <TextView
+            <EditText
+                android:id="@+id/my_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="false"
+                android:cursorVisible="false"
+                android:background="@android:color/transparent"
                 android:text="Денис"
                 android:layout_marginLeft="25dp"
                 android:textSize="16dp"
@@ -144,11 +154,15 @@
                 android:text="Отчество"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 android:layout_marginLeft="5dp" />
-            <TextView
+            <EditText
+                android:id="@+id/my_middle_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="text"
+                android:enabled="false"
+                android:background="@android:color/transparent"
                 android:text="Александрович"
                 android:layout_marginLeft="25dp"
                 android:textSize="16dp"
@@ -179,11 +193,15 @@
                 android:text="Email"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 android:layout_marginLeft="5dp" />
-            <TextView
+            <EditText
+                android:id="@+id/my_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:enabled="false"
+                android:background="@android:color/transparent"
                 android:text="denis.belozerov@edu.hse.ru"
                 android:layout_marginLeft="25dp"
                 android:textSize="16dp"
@@ -214,11 +232,15 @@
                 android:text="Город"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 android:layout_marginLeft="5dp" />
-            <TextView
+            <EditText
+                android:id="@+id/my_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="text"
+                android:enabled="false"
+                android:background="@android:color/transparent"
                 android:text="Пермь"
                 android:layout_marginLeft="25dp"
                 android:textSize="16dp"
@@ -258,12 +280,13 @@
                 android:text="Аллергия"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 android:layout_marginLeft="5dp" />
             <TextView
+                android:id="@+id/my_allergy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Пермь"
+                android:text="Аллергия"
                 android:layout_marginLeft="25dp"
                 android:textSize="16dp"
                 android:textColor="@color/md_blue_grey_600" />
@@ -286,19 +309,20 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/baseline_no_food_24"/>
+                android:src="@drawable/baseline_favorite_border_24"/>
             <TextView
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
                 android:text="Идеология"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="15dp"
+                android:textSize="16dp"
                 android:layout_marginLeft="5dp" />
             <Spinner
+                android:id="@+id/my_ideology"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="25dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <View
             android:layout_width="match_parent"
@@ -307,5 +331,17 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="10dp" />
+        <Button
+            android:id="@+id/btn_edit_profile"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:textSize="16dp"
+            android:text="Изменить"
+            android:background="@drawable/bg_btn"
+            android:gravity="center"
+            android:drawableLeft="@drawable/baseline_create_24"
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="-10dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.constraintlayout.widget.ConstraintLayout>
