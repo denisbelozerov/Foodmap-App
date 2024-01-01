@@ -23,11 +23,13 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         private const val DATABASE_VERSION = 2
         const val tableProducts = "Продукты"
         const val tableRecipies = "Рецепты"
+        const val tableUsers = "Пользователь"
 
         const val columnProducts_id = "_id"
         const val columnRecipies_id = "id"
         const val columnProductsName = "Название продукта"
         const val columnRecipiesName = "Название"
+        const val columnFamily = "Фамилия"
         const val columnRecipiesDescription = "Описание"
         const val columnRecipiesCategory = "Название категории"
         const val columnRecipiesCusine = "Название кухни"
@@ -43,6 +45,13 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         const val columnFavouriteProduct = "Избранное"
         const val columnFavouriteRecipies = "Избранное"
 
+        const val columnUser_id = "id"
+        const val columnUserFamily = "Фамилия"
+        const val columnUserName = "Имя"
+        const val columnUserMiddleName = "Отчество"
+        const val columnUserCity = "Город"
+        const val columnUserEmail = "Email"
+
         const val queryFodmap =
             "SELECT Продукты._id, Продукты.[Название продукта], Продукты.[Наличие глютена], FODMAP.[Единицы измерения гр], FODMAP.[Наличие Olygos (олигосахариды)], FODMAP.[Наличие Fructose (фруктоза)], FODMAP.[Наличие Polyols (полиолы)], FODMAP.[Наличие Lactose (лактоза)] FROM Продукты INNER JOIN FODMAP ON Продукты.[Название продукта] = FODMAP.[Название продукта]"
         const val queryProducts =
@@ -52,7 +61,7 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         const val queryAllRecipies =
             "SELECT Рецепты.[id], Рецепты.[Название], Рецепты.[Описание], Рецепты.[Индикатор безопасности], \"Категория рецептов\".[Название категории], \"Тип кухни\".[Название кухни], Рецепты.[Избранное] FROM \"Категория рецептов\" INNER JOIN Рецепты ON \"Категория рецептов\".[id] = Рецепты.[Категория] INNER JOIN \"Тип кухни\" ON Рецепты.[Национальная кухня] = \"Тип кухни\".[id]"
         const val queryFavouriteRecipies = queryAllRecipies + "WHERE Рецепты.[Избранное] = 1"
-        const val queryInfoUser = "SELECT * FROM Пользователь"
+        const val queryInfoUser = "SELECT * FROM Пользователь WHERE Пользователь.[id] = 1"
         const val queryIdeology = "SELECT * FROM Идеология"
     }
 
@@ -85,7 +94,7 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         return SQLiteDatabase.openDatabase(DATABASE_PATH, null, SQLiteDatabase.OPEN_READWRITE)
     }
 
-    fun addProductToFavourite(position: Int) {
+   fun addProductToFavourite(position: Int) {
         var db: SQLiteDatabase = this.open()
         var newPosition = position + 1
         db.execSQL("UPDATE $tableProducts SET $columnFavouriteProduct = 1 WHERE $columnProducts_id = $newPosition")
@@ -112,4 +121,15 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         db.execSQL("UPDATE $tableRecipies SET $columnFavouriteRecipies = 0 WHERE $columnRecipies_id = $newPosition")
         db.close()
     }
+
+    fun updateInfoUser(arrayList: List<String>) {
+        var db: SQLiteDatabase = this.open()
+
+        db.execSQL("UPDATE $tableUsers SET $columnUserFamily = ${arrayList[0]}, $columnUserName = ${arrayList[1]}, $columnUserMiddleName = ${arrayList[2]}, $columnUserEmail = ${arrayList[3]}, $columnUserCity = ${arrayList[4]} WHERE $columnUser_id = 1")
+        db.close()
+    }
+
+    /*fun getInfoUser(): List<String> {
+
+    }*/
 }

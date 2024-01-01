@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                 ProfileDrawerItem()
                     .withName("Денис Белозёров")
                     .withIcon(R.drawable._avatar180)
-                    .withEmail("denis.belozerov@edu.hse.ru")
+                    .withEmail("denis.belozeroov@edu.hse.ru")
             )
             .build()
     }

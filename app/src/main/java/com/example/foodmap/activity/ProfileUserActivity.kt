@@ -8,9 +8,7 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
 import com.example.foodmap.DatabaseHelper
-import com.example.foodmap.ProductAdapter
 import com.example.foodmap.R
 import com.example.foodmap.RecipiesActivity
 import com.example.foodmap.SelectedProducts
@@ -116,7 +114,7 @@ class ProfileUserActivity : AppCompatActivity() {
                 ProfileDrawerItem()
                     .withName("Денис Белозёров")
                     .withIcon(R.drawable._avatar180)
-                    .withEmail("denis.belozerov@edu.hse.ru")
+                    .withEmail("denis.belozeroov@edu.hse.ru")
             )
             .build()
     }
@@ -124,6 +122,13 @@ class ProfileUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileUserBinding.inflate(layoutInflater)
+        val myFamily = binding.myFamily
+        val myName = binding.myName
+        val myMiddleName = binding.myMiddleName
+        val myEmail = binding.myEmail
+        val myCity = binding.myCity
+        val myFullName = binding.fullName
+
         setContentView(binding.root)
         databaseHelper = DatabaseHelper(applicationContext)
         databaseHelper.create_db()
@@ -132,52 +137,62 @@ class ProfileUserActivity : AppCompatActivity() {
         btnChangeData.setOnClickListener {
             if (btnChangeData.text == "Изменить") {
                 btnChangeData.setText("Сохранить")
-                binding.myFamily.isFocusable = true
-                binding.myFamily.isClickable = true
-                binding.myFamily.isCursorVisible = true
-                binding.myFamily.isEnabled = true
-                binding.myName.isFocusable = true
-                binding.myName.isClickable = true
-                binding.myName.isCursorVisible = true
-                binding.myName.isEnabled = true
-                binding.myMiddleName.isFocusable = true
-                binding.myMiddleName.isClickable = true
-                binding.myMiddleName.isCursorVisible = true
-                binding.myMiddleName.isEnabled = true
-                binding.myEmail.isFocusable = true
-                binding.myEmail.isClickable = true
-                binding.myEmail.isCursorVisible = true
-                binding.myEmail.isEnabled = true
-                binding.myCity.isFocusable = true
-                binding.myCity.isClickable = true
-                binding.myCity.isCursorVisible = true
-                binding.myCity.isEnabled = true
+
+                myFamily.isFocusable = true
+                myFamily.isClickable = true
+                myFamily.isCursorVisible = true
+                myFamily.isEnabled = true
+                myName.isFocusable = true
+                myName.isClickable = true
+                myName.isCursorVisible = true
+                myName.isEnabled = true
+                myMiddleName.isFocusable = true
+                myMiddleName.isClickable = true
+                myMiddleName.isCursorVisible = true
+                myMiddleName.isEnabled = true
+                myEmail.isFocusable = true
+                myEmail.isClickable = true
+                myEmail.isCursorVisible = true
+                myEmail.isEnabled = true
+                myCity.isFocusable = true
+                myCity.isClickable = true
+                myCity.isCursorVisible = true
+                myCity.isEnabled = true
 
             } else {
+                var fields = listOf<String>(
+                    myFamily.text.toString(),
+                    myName.text.toString(),
+                    myMiddleName.text.toString(),
+                    myEmail.text.toString(),
+                    myCity.text.toString()
+                )
+                databaseHelper.updateInfoUser(fields)
+
                 btnChangeData.setText("Изменить")
-                binding.myFamily.isFocusable = false
-                binding.myFamily.isClickable = false
-                binding.myFamily.isCursorVisible = false
-                binding.myFamily.isEnabled = false
-                binding.myName.isFocusable = false
-                binding.myName.isClickable = false
-                binding.myName.isCursorVisible = false
-                binding.myName.isEnabled = false
-                binding.myMiddleName.isFocusable = false
-                binding.myMiddleName.isClickable = false
-                binding.myMiddleName.isCursorVisible = false
-                binding.myMiddleName.isEnabled = false
-                binding.myEmail.isFocusable = false
-                binding.myEmail.isClickable = false
-                binding.myEmail.isCursorVisible = false
-                binding.myEmail.isEnabled = false
-                binding.myCity.isFocusable = false
-                binding.myCity.isClickable = false
-                binding.myCity.isCursorVisible = false
-                binding.myCity.isEnabled = false
+                myFamily.isFocusable = false
+                myFamily.isClickable = false
+                myFamily.isCursorVisible = false
+                myFamily.isEnabled = false
+                myName.isFocusable = false
+                myName.isClickable = false
+                myName.isCursorVisible = false
+                myName.isEnabled = false
+                myMiddleName.isFocusable = false
+                myMiddleName.isClickable = false
+                myMiddleName.isCursorVisible = false
+                myMiddleName.isEnabled = false
+                myEmail.isFocusable = false
+                myEmail.isClickable = false
+                myEmail.isCursorVisible = false
+                myEmail.isEnabled = false
+                myCity.isFocusable = false
+                myCity.isClickable = false
+                myCity.isCursorVisible = false
+                myCity.isEnabled = false
+
+
             }
-
-
         }
     }
 
