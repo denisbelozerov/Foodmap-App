@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         )
         fodmapCursor.moveToFirst()
         val itemOlygos =
-            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapOlygos)) // извлекаем характеристики продукта и передаем в AlertDialog
+            fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapOlygos))
         val itemFructose =
             fodmapCursor.getString(fodmapCursor.getColumnIndexOrThrow(DatabaseHelper.columnFodmapFructose))
         val itemPolyols =

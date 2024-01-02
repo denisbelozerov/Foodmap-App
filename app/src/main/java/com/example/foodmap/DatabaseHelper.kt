@@ -94,7 +94,7 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         return SQLiteDatabase.openDatabase(DATABASE_PATH, null, SQLiteDatabase.OPEN_READWRITE)
     }
 
-   fun addProductToFavourite(position: Int) {
+    fun addProductToFavourite(position: Int) {
         var db: SQLiteDatabase = this.open()
         var newPosition = position + 1
         db.execSQL("UPDATE $tableProducts SET $columnFavouriteProduct = 1 WHERE $columnProducts_id = $newPosition")
@@ -124,12 +124,29 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
 
     fun updateInfoUser(arrayList: List<String>) {
         var db: SQLiteDatabase = this.open()
-
-        db.execSQL("UPDATE $tableUsers SET $columnUserFamily = ${arrayList[0]}, $columnUserName = ${arrayList[1]}, $columnUserMiddleName = ${arrayList[2]}, $columnUserEmail = ${arrayList[3]}, $columnUserCity = ${arrayList[4]} WHERE $columnUser_id = 1")
+        db.execSQL("INSERT OR REPLACE INTO $tableUsers ($columnUser_id, $columnUserFamily, $columnUserName, $columnUserMiddleName, $columnUserEmail, $columnUserCity) VALUES (1, '${arrayList[0]}', '${arrayList[1]}', '${arrayList[2]}', '${arrayList[3]}', '${arrayList[4]}')")
         db.close()
     }
 
-    /*fun getInfoUser(): List<String> {
-
-    }*/
+    fun getInfoUser(): List<String> {
+        var db: SQLiteDatabase = this.open()
+        val userCursor = db.rawQuery(DatabaseHelper.queryInfoUser, null)
+        userCursor.moveToFirst()
+        val userFamily =
+            userCursor.getString(userCursor.getColumnIndexOrThrow(DatabaseHelper.columnUserFamily))
+        val userName =
+            userCursor.getString(userCursor.getColumnIndexOrThrow(DatabaseHelper.columnUserName))
+        val userMiddleName =
+            userCursor.getString(userCursor.getColumnIndexOrThrow(DatabaseHelper.columnUserMiddleName))
+        val userEmail =
+            userCursor.getString(userCursor.getColumnIndexOrThrow(DatabaseHelper.columnUserEmail))
+        val userCity =
+            userCursor.getString(userCursor.getColumnIndexOrThrow(DatabaseHelper.columnUserCity))
+        val userInfoList = listOf<String>(
+            "${userFamily}",
+            "${userName}", "${userMiddleName}", "${userEmail}", "${userCity}"
+        )
+        db.close()
+        return userInfoList
+    }
 }

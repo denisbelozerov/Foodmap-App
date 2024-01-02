@@ -136,6 +136,13 @@ class ProfileUserActivity : AppCompatActivity() {
         btnChangeData = binding.btnEditProfile
         btnChangeData.setOnClickListener {
             if (btnChangeData.text == "Изменить") {
+                val userInfo = databaseHelper.getInfoUser()
+                myFamily.setText(userInfo[0])
+                myName.setText(userInfo[1])
+                myMiddleName.setText(userInfo[2])
+                myEmail.setText(userInfo[3])
+                myCity.setText(userInfo[4])
+
                 btnChangeData.setText("Сохранить")
 
                 myFamily.isFocusable = true
@@ -160,7 +167,7 @@ class ProfileUserActivity : AppCompatActivity() {
                 myCity.isEnabled = true
 
             } else {
-                var fields = listOf<String>(
+                var fields = listOf(
                     myFamily.text.toString(),
                     myName.text.toString(),
                     myMiddleName.text.toString(),
@@ -199,7 +206,6 @@ class ProfileUserActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         db = databaseHelper.open()
-        infoUserCursor = db.rawQuery(DatabaseHelper.queryInfoUser, null)
         initial()
     }
 
