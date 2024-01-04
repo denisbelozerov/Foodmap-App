@@ -149,4 +149,10 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         db.close()
         return userInfoList
     }
+
+    fun getInfoUser(arrayList: List<String>) {
+        var db: SQLiteDatabase = this.open()
+        db.execSQL(queryIdeology)
+        db.close()
+    }
 }

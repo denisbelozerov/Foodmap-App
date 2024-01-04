@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         productAdapter = ProductAdapter(myProducts(), this)
         recyclerView.adapter = productAdapter
         mToolbar = binding.mainToolbar
-
         setSupportActionBar(mToolbar)
         createHeader()
         createDrawer()
@@ -113,14 +112,15 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     private fun createHeader() {
+        val userInfo = databaseHelper.getInfoUser()
         mHeader = AccountHeaderBuilder()
             .withActivity(this)
             .withHeaderBackground(R.drawable.header)
             .addProfiles(
                 ProfileDrawerItem()
-                    .withName("Денис Белозёров")
+                    .withName("${userInfo[1]} ${userInfo[0]}")
                     .withIcon(R.drawable._avatar180)
-                    .withEmail("denis.belozeroov@edu.hse.ru")
+                    .withEmail("${userInfo[3]}")
             )
             .build()
     }

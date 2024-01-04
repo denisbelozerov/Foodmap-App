@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.foodmap.DatabaseHelper
@@ -107,14 +108,15 @@ class ProfileUserActivity : AppCompatActivity() {
     }
 
     private fun createHeader() {
+        val userInfo = databaseHelper.getInfoUser()
         mHeader = AccountHeaderBuilder()
             .withActivity(this)
             .withHeaderBackground(R.drawable.header)
             .addProfiles(
                 ProfileDrawerItem()
-                    .withName("Денис Белозёров")
+                    .withName("${userInfo[1]} ${userInfo[0]}")
                     .withIcon(R.drawable._avatar180)
-                    .withEmail("denis.belozeroov@edu.hse.ru")
+                    .withEmail("${userInfo[3]}")
             )
             .build()
     }
@@ -128,21 +130,23 @@ class ProfileUserActivity : AppCompatActivity() {
         val myEmail = binding.myEmail
         val myCity = binding.myCity
         val myFullName = binding.fullName
+        val myIdeology = binding.myIdeology
 
         setContentView(binding.root)
         databaseHelper = DatabaseHelper(applicationContext)
         databaseHelper.create_db()
-
         btnChangeData = binding.btnEditProfile
+
+        val userInfo = databaseHelper.getInfoUser()
+        myFamily.setText(userInfo[0])
+        myName.setText(userInfo[1])
+        myMiddleName.setText(userInfo[2])
+        myEmail.setText(userInfo[3])
+        myCity.setText(userInfo[4])
+        myFullName.setText("${userInfo[0]} " + "${userInfo[1]} " + "${userInfo[2]}")
+
         btnChangeData.setOnClickListener {
             if (btnChangeData.text == "Изменить") {
-                val userInfo = databaseHelper.getInfoUser()
-                myFamily.setText(userInfo[0])
-                myName.setText(userInfo[1])
-                myMiddleName.setText(userInfo[2])
-                myEmail.setText(userInfo[3])
-                myCity.setText(userInfo[4])
-
                 btnChangeData.setText("Сохранить")
 
                 myFamily.isFocusable = true
@@ -176,6 +180,9 @@ class ProfileUserActivity : AppCompatActivity() {
                 )
                 databaseHelper.updateInfoUser(fields)
 
+                val toastChangeUserInfo = Toast.makeText(applicationContext, "Изменения сохранены. Перейдите на другой экран приложения.", Toast.LENGTH_SHORT)
+                toastChangeUserInfo.show()
+
                 btnChangeData.setText("Изменить")
                 myFamily.isFocusable = false
                 myFamily.isClickable = false
@@ -197,8 +204,6 @@ class ProfileUserActivity : AppCompatActivity() {
                 myCity.isClickable = false
                 myCity.isCursorVisible = false
                 myCity.isEnabled = false
-
-
             }
         }
     }
@@ -207,6 +212,10 @@ class ProfileUserActivity : AppCompatActivity() {
         super.onStart()
         db = databaseHelper.open()
         initial()
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onDestroy() {
