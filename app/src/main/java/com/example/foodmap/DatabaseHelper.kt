@@ -4,7 +4,9 @@ import android.content.Context
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
+import android.util.*
+import android.content.ContentValues
+import android.database.Cursor
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -19,11 +21,13 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
 
     companion object {
         private lateinit var DATABASE_PATH: String
-        private const val DATABASE_NAME = "fodmap_ver3.db"
+        private const val DATABASE_NAME = "fodmap_ver4.db"
         private const val DATABASE_VERSION = 2
+
         const val tableProducts = "Продукты"
         const val tableRecipies = "Рецепты"
         const val tableUsers = "Пользователь"
+        const val tableNotes = "Заметки"
 
         const val columnProducts_id = "_id"
         const val columnRecipies_id = "id"
@@ -52,6 +56,8 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         const val columnUserCity = "Город"
         const val columnUserEmail = "Email"
 
+        const val columnNotesStatus = "Статус"
+
         const val queryFodmap =
             "SELECT Продукты._id, Продукты.[Название продукта], Продукты.[Наличие глютена], FODMAP.[Единицы измерения гр], FODMAP.[Наличие Olygos (олигосахариды)], FODMAP.[Наличие Fructose (фруктоза)], FODMAP.[Наличие Polyols (полиолы)], FODMAP.[Наличие Lactose (лактоза)] FROM Продукты INNER JOIN FODMAP ON Продукты.[Название продукта] = FODMAP.[Название продукта]"
         const val queryProducts =
@@ -67,7 +73,10 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
 
     override fun onCreate(db: SQLiteDatabase?) {}
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (newVersion > oldVersion)
+            create_db()
+    }
 
     fun create_db() {
         val file = File(DATABASE_PATH)
@@ -131,6 +140,7 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
     fun getInfoUser(): List<String> {
         var db: SQLiteDatabase = this.open()
         val userCursor = db.rawQuery(DatabaseHelper.queryInfoUser, null)
+
         userCursor.moveToFirst()
         val userFamily =
             userCursor.getString(userCursor.getColumnIndexOrThrow(DatabaseHelper.columnUserFamily))
@@ -150,9 +160,109 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         return userInfoList
     }
 
-    fun getInfoUser(arrayList: List<String>) {
+    /*fun getInfoUser(arrayList: List<String>) {
         var db: SQLiteDatabase = this.open()
         db.execSQL(queryIdeology)
+        db.close()
+    }*/
+
+    fun insertNoteBookData(
+        title: String?,
+        description: String?,
+        created_at: String?
+    ): Boolean {
+        // ar date: Date
+        var db: SQLiteDatabase = this.open()
+        val contentValues = ContentValues()
+        contentValues.put("Заголовок", title)
+        contentValues.put("Текст заметки", description)
+        contentValues.put("Дата создания", created_at)
+        contentValues.put("Избранное", 0)
+        contentValues.put("Статус", 0)
+        db.insert(tableNotes, null, contentValues)
+        db.close()
+        return true
+    }
+
+    fun updateNoteBookData(
+        id: String,
+        title: String?,
+        description: String?
+    ): Boolean {
+        var db: SQLiteDatabase = this.open()
+        val contentValues = ContentValues()
+        contentValues.put("Заголовок", title)
+        contentValues.put("Текст заметки", description)
+        db.update(
+            tableNotes,
+            contentValues,
+            "id = ? ",
+            arrayOf(id)
+        )
+        return true
+    }
+
+    fun deleteNoteBookData(id: String): Boolean {
+        var db: SQLiteDatabase = this.open()
+        db.delete(tableNotes, "id = ? ", arrayOf(id))
+        db.close()
+        return true
+    }
+
+    fun updateNoteBookFev(id: String, fav: Int?): Boolean {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put("Избранное", fav)
+        db.update(
+            tableNotes,
+            contentValues,
+            "id = ? ",
+            arrayOf(id)
+        )
+        db.close()
+        return true
+    }
+
+    fun updateNoteBookStatus(id: String, status: Int?): Boolean {
+        var db: SQLiteDatabase = this.open()
+        val contentValues = ContentValues()
+        contentValues.put("Статус", status)
+        db.update(
+            tableNotes,
+            contentValues,
+            "id = ? ",
+            arrayOf(id)
+        )
+        db.close()
+        return true
+    }
+
+    val noteBookData: Cursor
+        get() {
+            var db: SQLiteDatabase = this.open()
+            return db.rawQuery(
+                "select * from $tableNotes WHERE $columnNotesStatus = 0 order by id asc",
+                null
+            )
+            db.close()
+        }
+
+    val archivedData: Cursor
+        get() {
+            var db: SQLiteDatabase = this.open()
+            return db.rawQuery(
+                "select * from $tableNotes WHERE $columnNotesStatus = 1 order by id asc",
+                null
+            )
+            db.close()
+        }
+
+    fun getSingleNoteBookData(id: String): Cursor {
+        var db: SQLiteDatabase = this.open()
+        return db.rawQuery(
+            "select * from $tableNotes WHERE id = '$id'",
+            null
+        )
         db.close()
     }
 }

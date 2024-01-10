@@ -98,11 +98,13 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                         val intentAllProducts = Intent(this@MainActivity, MainActivity::class.java)
                         val intentAllRecipies = Intent(this@MainActivity, RecipiesActivity::class.java)
                         val intentUserInfo = Intent(this@MainActivity, ProfileUserActivity::class.java)
+                        val intentNotes = Intent(this@MainActivity, NotesActivity::class.java)
 
                         when (position) {
                             1 -> startActivity(intentAllProducts)
                             2 -> startActivity(intentAllRecipies)
                             3 -> startActivity(intentUserInfo)
+                            4 -> startActivity(intentNotes)
                             5 -> startActivity(intentMyProducts)
                             6 -> startActivity(intentMyRecipies)
                         }

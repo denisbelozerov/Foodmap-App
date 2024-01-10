@@ -187,6 +187,7 @@ class RecipiesActivity : AppCompatActivity(), OnItemClickListenerRecipe {
     override fun onStart() {
         super.onStart()
         db = databaseHelper.open()
+        val versiondb = db.version
         recipiesCursor = db.rawQuery(DatabaseHelper.Companion.queryAllRecipies, null)
         descriptionRecipeCursor = db.rawQuery(DatabaseHelper.Companion.queryFodmap, null)
         initial()

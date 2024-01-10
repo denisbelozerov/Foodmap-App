@@ -29,6 +29,10 @@
             android:label="@string/user_info"
             android:exported="false"
             android:theme="@style/NoActionBarTheme"/>
+        <activity android:name=".activity.AddAndModifyNoteBookData"/>
+        <activity android:name=".activity.ArchivedActivity"/>
+        <activity android:name=".activity.NotesActivity"
+            android:label="@string/my_notes"/>
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/all_products"

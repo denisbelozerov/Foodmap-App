@@ -13,4 +13,5 @@
     <string name="selected_products">Любимые продукты</string>
     <string name="selected_recipies">Любимые рецепты</string>
     <string name="user_info">Профиль пользователя</string>
+    <string name="my_notes">Мой дневник</string>
 </resources>
