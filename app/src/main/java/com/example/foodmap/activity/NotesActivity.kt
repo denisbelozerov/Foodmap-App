@@ -21,13 +21,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class NotesActivity : AppCompatActivity() {
-    /*val mydb = DatabaseHelper(this)
-    var dataList =
-        ArrayList<HashMap<String, String>>()
-    var simpleList: ListView? = null
-    var add_button: FloatingActionButton? = null
-    var empty_text: TextView? = null*/
-
     private lateinit var binding: ActivityMenuBinding
     private lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
@@ -44,11 +37,6 @@ class NotesActivity : AppCompatActivity() {
 
         databaseHelper = DatabaseHelper(applicationContext)
         databaseHelper.create_db()
-
-        // setContentView(R.layout.activity_menu)
-        // empty_text = findViewById<View>(R.id.empty_text) as TextView
-        // simpleList = findViewById<View>(R.id.ListView) as ListView
-
         empty_text = binding.emptyText
         simpleList = binding.ListView
 
@@ -67,6 +55,16 @@ class NotesActivity : AppCompatActivity() {
         populateData()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // populateData()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        db.close()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
@@ -81,16 +79,6 @@ class NotesActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // populateData()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        db.close()
     }
 
     fun populateData() {
@@ -131,23 +119,23 @@ class NotesActivity : AppCompatActivity() {
                     builder.setTitle(List[+position]["Заголовок"])
                     builder.setMessage(List[+position]["Текст заметки"])
                     builder.setNeutralButton(
-                        "ARCHIVE"
+                        "В архив"
                     ) { dialog, id ->
                         databaseHelper!!.updateNoteBookStatus(List[+position]["id"]!!, 1)
                         populateData()
                     }
                     builder.setNegativeButton(
-                        "EDIT"
+                        "Изменить"
                     ) { dialog, id ->
                         val i =
                             Intent(this@NotesActivity, AddAndModifyNoteBookData::class.java)
                         i.putExtra("id", List[+position]["id"])
                         i.putExtra("Заголовок", List[+position]["Заголовок"])
-                        i.putExtra("Текст заметки", List[+position]["Текст заметки"])
+                        i.putExtra("Текст", List[+position]["Текст заметки"])
                         i.putExtra("action", "edit")
                         startActivity(i)
                     }
-                    builder.setPositiveButton("CANCEL", null)
+                    builder.setPositiveButton("Отмена", null)
                     builder.show()
                 }
         }

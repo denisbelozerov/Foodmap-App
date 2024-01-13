@@ -39,31 +39,34 @@ class AddAndModifyNoteBookData : AppCompatActivity() {
         databaseHelper.create_db()
         db = databaseHelper.open()
 
+        var title = binding.title
+        var description = binding.description
+        var save_btn = binding.saveBtn
+
         val i = intent
         i_action = i.getStringExtra("action").toString()
         if (i_action!!.trim().contentEquals("edit")) {
-            supportActionBar!!.setTitle("Udpate")
+            supportActionBar!!.setTitle("Изменить заметку")
         } else {
             supportActionBar!!.setTitle("Add New")
         }
-        setContentView(R.layout.activity_add_modify_notebook_data)
-        var title = findViewById(R.id.title) as TextView
-        var description = findViewById(R.id.description) as TextView
-        var save_btn = findViewById(R.id.save_btn) as Button
+
         if (i_action!!.trim().contentEquals("edit")) {
             i_id = i.getStringExtra("id")
-            val i_title = i.getStringExtra("title")
-            val i_des = i.getStringExtra("description")
-            title!!.text  = i_title
-            description!!.text = i_des
-            save_btn!!.text = "SAVE"
+            val i_title = i.getStringExtra("Заголовок")
+            val i_des = i.getStringExtra("Текст")
+
+            title!!.setText("$i_title")
+            description!!.setText("$i_des")
+            save_btn!!.setText("Сохранить")
         }
+
         save_btn.setOnClickListener(View.OnClickListener {
             title_data = title!!.text.toString()
             des_data = description!!.text.toString()
             if (i_action!!.trim { it <= ' ' }.contentEquals("edit") && title_data!!.length > 3) {
                 if (title_data!!.trim { it <= ' ' }.length > 0) {
-                    databaseHelper!!.updateNoteBookData(i_id!!, title_data, des_data)
+                    databaseHelper!!.updateNoteBookData(id = i_id!!, title = title_data, description = des_data)
                     finish()
                 } else {
                     Toast.makeText(
@@ -78,7 +81,11 @@ class AddAndModifyNoteBookData : AppCompatActivity() {
                     SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                         .format(Date())
                 if (title_data!!.trim { it <= ' ' }.length > 0) {
-                    databaseHelper!!.insertNoteBookData(title_data, des_data, date.toString())
+                    databaseHelper!!.insertNoteBookData(
+                        title = title_data,
+                        description = des_data,
+                        created_at = date.toString()
+                    )
                     finish()
                 } else {
                     Toast.makeText(
@@ -89,8 +96,5 @@ class AddAndModifyNoteBookData : AppCompatActivity() {
                 }
             }
         })
-
-
-        //mydb.insertNoteBookData(title_data, des_data, date.toString());
     }
 }

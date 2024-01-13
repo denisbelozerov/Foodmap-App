@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.*
 import android.content.ContentValues
 import android.database.Cursor
+import android.provider.ContactsContract.Intents.Insert
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -21,8 +22,8 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
 
     companion object {
         private lateinit var DATABASE_PATH: String
-        private const val DATABASE_NAME = "fodmap_ver4.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_NAME = "fodmap_ver5.db"
+        private const val DATABASE_VERSION = 3
 
         const val tableProducts = "Продукты"
         const val tableRecipies = "Рецепты"
@@ -56,6 +57,12 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         const val columnUserCity = "Город"
         const val columnUserEmail = "Email"
 
+        const val columnNotes_id = "id"
+        const val columnNotesDateCreated = "Дата_создания"
+        const val columnNotesDateChanged = "Дата_изменения"
+        const val columnNotesTitle = "Заголовок"
+        const val columnNotesDescription = "Текст_заметки"
+        const val columnNotesFavorite = "Избранное"
         const val columnNotesStatus = "Статус"
 
         const val queryFodmap =
@@ -160,26 +167,13 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         return userInfoList
     }
 
-    /*fun getInfoUser(arrayList: List<String>) {
-        var db: SQLiteDatabase = this.open()
-        db.execSQL(queryIdeology)
-        db.close()
-    }*/
-
     fun insertNoteBookData(
         title: String?,
         description: String?,
         created_at: String?
     ): Boolean {
-        // ar date: Date
         var db: SQLiteDatabase = this.open()
-        val contentValues = ContentValues()
-        contentValues.put("Заголовок", title)
-        contentValues.put("Текст заметки", description)
-        contentValues.put("Дата создания", created_at)
-        contentValues.put("Избранное", 0)
-        contentValues.put("Статус", 0)
-        db.insert(tableNotes, null, contentValues)
+        db.execSQL("INSERT INTO $tableNotes ($columnNotesDateCreated, $columnNotesTitle, $columnNotesDescription, $columnNotesFavorite, $columnNotesStatus) VALUES ('${created_at}', '${title}', '${description}', 0, 0)")
         db.close()
         return true
     }
@@ -190,15 +184,8 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
         description: String?
     ): Boolean {
         var db: SQLiteDatabase = this.open()
-        val contentValues = ContentValues()
-        contentValues.put("Заголовок", title)
-        contentValues.put("Текст заметки", description)
-        db.update(
-            tableNotes,
-            contentValues,
-            "id = ? ",
-            arrayOf(id)
-        )
+        db.execSQL("UPDATE $tableNotes SET $columnNotesTitle = '${title}', $columnNotesDescription = '${description}' WHERE $columnNotes_id = $id")
+        db.close()
         return true
     }
 
