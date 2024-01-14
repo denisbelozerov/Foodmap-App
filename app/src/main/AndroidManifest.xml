@@ -30,7 +30,8 @@
             android:exported="false"
             android:theme="@style/NoActionBarTheme"/>
         <activity android:name=".activity.AddAndModifyNoteBookData"/>
-        <activity android:name=".activity.ArchivedActivity"/>
+        <activity android:name=".activity.ArchivedActivity"
+            android:label="@string/archived_notes"/>
         <activity android:name=".activity.NotesActivity"
             android:label="@string/my_notes"/>
         <activity
@@ -40,7 +41,6 @@
             android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

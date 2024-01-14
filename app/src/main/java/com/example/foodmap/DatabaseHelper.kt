@@ -191,13 +191,13 @@ class DatabaseHelper(private val myContext: Context) : SQLiteOpenHelper(
 
     fun deleteNoteBookData(id: String): Boolean {
         var db: SQLiteDatabase = this.open()
-        db.delete(tableNotes, "id = ? ", arrayOf(id))
+        db.execSQL("DELETE FROM $tableNotes WHERE $columnNotes_id = $id")
         db.close()
         return true
     }
 
     fun updateNoteBookFev(id: String, fav: Int?): Boolean {
-        val db = this.writableDatabase
+        var db: SQLiteDatabase = this.open()
         val contentValues = ContentValues()
         contentValues.put("Избранное", fav)
         db.update(

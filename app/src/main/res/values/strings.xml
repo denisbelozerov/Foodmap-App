@@ -10,8 +10,10 @@
     <string name="gluten">Глютен</string>
     <string name="all_products">Все продукты</string>
     <string name="all_recipies">Все рецепты</string>
-    <string name="selected_products">Любимые продукты</string>
-    <string name="selected_recipies">Любимые рецепты</string>
+    <string name="selected_products">Мои продукты</string>
+    <string name="selected_recipies">Мои рецепты</string>
     <string name="user_info">Профиль пользователя</string>
     <string name="my_notes">Мой дневник</string>
+    <string name="archived_notes">Архивные заметки</string>
+    <string name="notes_empty">Здесь пока ничего нет</string>
 </resources>

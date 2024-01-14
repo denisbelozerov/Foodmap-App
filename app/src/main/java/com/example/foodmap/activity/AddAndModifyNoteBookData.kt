@@ -17,12 +17,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AddAndModifyNoteBookData : AppCompatActivity() {
-    /*val mydb = DatabaseHelper(this)
-    var title_data: String? = null
-    var des_data: String? = null
-    var i_action: String? = null
-    var i_id: String? = null*/
-
     private lateinit var binding: ActivityAddModifyNotebookDataBinding
     private lateinit var databaseHelper: DatabaseHelper
     lateinit var db: SQLiteDatabase
